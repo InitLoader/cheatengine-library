@@ -572,7 +572,13 @@ begin
       p:=0;
       for i:=0 to maxnumberofregions-1 do
       begin
-        maxregionsize:=max(maxregionsize, pm[i].memorysize);
+        if pm[i].memorysize>qword(maxregionsize) then
+        begin
+          if pm[i].memorysize>qword(high(integer)) then
+            maxregionsize:=high(integer)
+          else
+            maxregionsize:=integer(pm[i].memorysize);
+        end;
         pm[i].startaddress:=pointer(p); //set the offset in the file (if it wasn't set already)
         inc(p, pm[i].MemorySize);
       end;

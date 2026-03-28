@@ -137,8 +137,6 @@ type
 
     isSelected: boolean; //lazarus bypass. Because lazarus does not implement multiselect I have to keep track of which entries are selected
 
-    showAsHex: boolean;
-
     //free for editing by user:
     autoAssembleWindow: TForm; //window storage for an auto assembler editor window
 
@@ -162,7 +160,6 @@ type
     function getBaseAddress: ptrUint; //return the base address, if offset, the calculated address
     procedure RefreshCustomType;
     function ReinterpretAddress(forceremovalofoldaddress: boolean=false): boolean;
-    property Value: string read GetValue write SetValue;
     property bytesize: integer read getByteSize;
 
     function hasHotkeys: boolean;
@@ -188,7 +185,6 @@ type
     property AddressString: string read getAddressString;
     property Active: boolean read fActive write setActive;
     property VarType: TVariableType read fVarType write setVarType;
-    property CustomTypeName: string read fCustomTypeName write setCustomTypeName;
     property Value: string read GetValue write SetValue;
     property AllowDecrease: boolean read fallowDecrease write setAllowDecrease;
     property AllowIncrease: boolean read fallowIncrease write setAllowIncrease;

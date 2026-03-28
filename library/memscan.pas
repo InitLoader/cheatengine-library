@@ -6266,7 +6266,6 @@ procedure TMemscan.CreateScanfolder;
 var guid: TGUID;
     usedtempdir: string;
 
-    utf8: boolean;
 begin
   CreateGUID(guid);
   if (length(trim(tempdiralternative))>2) and dontusetempdir then
@@ -6279,22 +6278,17 @@ begin
   fScanResultFolder:=usedtempdir+'Cheat Engine'+pathdelim;
 
 
-  if DirectoryExistsUTF8(usedtempdir) then
-    utf8:=true
-  else
-  if DirectoryExists(usedtempdir) then
-    utf8:=false
-  else
+  if not DirectoryExists(usedtempdir) then
     raise exception.create(Format(rsTheTemporaryScanDirectoryDoesNotExistCheckYourScan, [usedtempdir]));
 
 
-  if (utf8 and (not DirectoryExistsUTF8(fScanResultFolder))) or ((not utf8) and (not DirectoryExists(fScanResultFolder))) then
+  if not DirectoryExists(fScanResultFolder) then
   begin
-    if (utf8 and (not CreateDirUTF8(fScanResultFolder))) or ((not utf8) and (not CreateDir(fScanResultFolder))) then
+    if not CreateDir(fScanResultFolder) then
     begin
       //failure in creating the dir
       MakePathAccessible(fScanResultFolder);
-      if (utf8 and (not CreateDirUTF8(fScanResultFolder))) or ((not utf8) and (not CreateDirUTF8(fScanResultFolder))) then
+      if not CreateDir(fScanResultFolder) then
         raise exception.create(rsFailureCreatingTheScanDirectory);
     end;
   end;

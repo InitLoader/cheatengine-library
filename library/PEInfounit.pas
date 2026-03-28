@@ -73,12 +73,19 @@ end;
 function peinfo_getdatabase(header: pointer; headersize: integer=0): ptrUint;
 var
     ImageNTHeader: PImageNtHeaders;
+    OptionalHeader: PByte;
+    OptionalMagic: word;
 begin
   result:=0;
   if (headersize=0) or (PImageDosHeader(header)^._lfanew<=headersize-sizeof(TImageNtHeaders)) then
   begin
     ImageNTHeader:=PImageNtHeaders(ptrUint(header)+PImageDosHeader(header)^._lfanew);
-    result:=ImageNTHeader.OptionalHeader.BaseOfData;
+    OptionalHeader:=@ImageNTHeader.OptionalHeader;
+    OptionalMagic:=PWord(OptionalHeader)^;
+
+    //PE32 contains BaseOfData, PE32+ does not
+    if OptionalMagic=$10b then
+      result:=PDword(OptionalHeader+28)^;
   end;
 end;
 
